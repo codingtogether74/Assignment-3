@@ -13,12 +13,13 @@
 		E43466B615979549000638EE /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E43466B415979549000638EE /* InfoPlist.strings */; };
 		E43466B815979549000638EE /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E43466B715979549000638EE /* main.m */; };
 		E43466BC15979549000638EE /* CalculatorAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E43466BB15979549000638EE /* CalculatorAppDelegate.m */; };
-		E43466BF15979549000638EE /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E43466BD15979549000638EE /* MainStoryboard.storyboard */; };
+		E43466BF15979549000638EE /* iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E43466BD15979549000638EE /* iPhone.storyboard */; };
 		E43466C215979549000638EE /* CalculatorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E43466C115979549000638EE /* CalculatorViewController.m */; };
 		E45F5C17159CE7AF00A3B013 /* CalculatorBrain.m in Sources */ = {isa = PBXBuildFile; fileRef = E45F5C16159CE7AF00A3B013 /* CalculatorBrain.m */; };
 		E4C8043815B3D56600F58C37 /* Graphic.m in Sources */ = {isa = PBXBuildFile; fileRef = E4C8043515B3D56600F58C37 /* Graphic.m */; };
 		E4C8043915B3D56600F58C37 /* GraphViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E4C8043715B3D56600F58C37 /* GraphViewController.m */; };
 		E4C8043C15B3DECD00F58C37 /* AxesDrawer.m in Sources */ = {isa = PBXBuildFile; fileRef = E4C8043B15B3DECD00F58C37 /* AxesDrawer.m */; };
+		E4C8046715B46FBA00F58C37 /* iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4C8046615B46FBA00F58C37 /* iPad.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,7 +33,7 @@
 		E43466B915979549000638EE /* CalculatorCT-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CalculatorCT-Prefix.pch"; sourceTree = "<group>"; };
 		E43466BA15979549000638EE /* CalculatorAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CalculatorAppDelegate.h; sourceTree = "<group>"; };
 		E43466BB15979549000638EE /* CalculatorAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CalculatorAppDelegate.m; sourceTree = "<group>"; };
-		E43466BE15979549000638EE /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
+		E43466BE15979549000638EE /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/iPhone.storyboard; sourceTree = "<group>"; };
 		E43466C015979549000638EE /* CalculatorViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CalculatorViewController.h; sourceTree = "<group>"; };
 		E43466C115979549000638EE /* CalculatorViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CalculatorViewController.m; sourceTree = "<group>"; };
 		E45F5C15159CE7AF00A3B013 /* CalculatorBrain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalculatorBrain.h; sourceTree = "<group>"; };
@@ -43,6 +44,7 @@
 		E4C8043715B3D56600F58C37 /* GraphViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GraphViewController.m; sourceTree = "<group>"; };
 		E4C8043A15B3DECD00F58C37 /* AxesDrawer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AxesDrawer.h; sourceTree = "<group>"; };
 		E4C8043B15B3DECD00F58C37 /* AxesDrawer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AxesDrawer.m; sourceTree = "<group>"; };
+		E4C8046615B46FBA00F58C37 /* iPad.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = iPad.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,9 +91,10 @@
 		E43466B115979549000638EE /* CalculatorCT */ = {
 			isa = PBXGroup;
 			children = (
+				E4C8046615B46FBA00F58C37 /* iPad.storyboard */,
 				E43466BA15979549000638EE /* CalculatorAppDelegate.h */,
 				E43466BB15979549000638EE /* CalculatorAppDelegate.m */,
-				E43466BD15979549000638EE /* MainStoryboard.storyboard */,
+				E43466BD15979549000638EE /* iPhone.storyboard */,
 				E4C8043415B3D56600F58C37 /* Graphic.h */,
 				E4C8043515B3D56600F58C37 /* Graphic.m */,
 				E4C8043615B3D56600F58C37 /* GraphViewController.h */,
@@ -170,7 +173,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				E43466B615979549000638EE /* InfoPlist.strings in Resources */,
-				E43466BF15979549000638EE /* MainStoryboard.storyboard in Resources */,
+				E43466BF15979549000638EE /* iPhone.storyboard in Resources */,
+				E4C8046715B46FBA00F58C37 /* iPad.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -202,12 +206,12 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
-		E43466BD15979549000638EE /* MainStoryboard.storyboard */ = {
+		E43466BD15979549000638EE /* iPhone.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				E43466BE15979549000638EE /* en */,
 			);
-			name = MainStoryboard.storyboard;
+			name = iPhone.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -264,7 +268,9 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CalculatorCT/CalculatorCT-Prefix.pch";
 				INFOPLIST_FILE = "CalculatorCT/CalculatorCT-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				PRODUCT_NAME = CalculatorCT3;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -275,7 +281,9 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CalculatorCT/CalculatorCT-Prefix.pch";
 				INFOPLIST_FILE = "CalculatorCT/CalculatorCT-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				PRODUCT_NAME = CalculatorCT3;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

@@ -3,7 +3,7 @@
 //  CalculatorCT
 //
 //  Created by Tatiana Kornilovaon 6/24/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Copyright (c) 2012 __MyCompanyName__. All rights reservedvvv.
 //
 
 #import "CalculatorViewController.h"
@@ -135,9 +135,23 @@
     [self synchronizeView];      
 }
 
-- (IBAction)graphPress:(id)sender {
-    [self performSegueWithIdentifier:@"ShowGraph" sender:self];
+-(GraphViewController *)splitViewGraphViewController
+{
+    id gvc=[self.splitViewController.viewControllers lastObject];
+    if (![gvc isKindOfClass:[GraphViewController class]]) {
+        gvc=nil;
+    }
+    return gvc;
 }
+- (IBAction)graphPress:(id)sender {
+    if ([self splitViewGraphViewController]) {
+        [self splitViewGraphViewController].program=self.brain.program;
+    }else {
+
+        [self performSegueWithIdentifier:@"ShowGraph" sender:self];
+    }    
+}
+
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([segue.identifier isEqualToString:@"ShowGraph"]) {
@@ -216,6 +230,10 @@
         userDisplayText = [userDisplayText substringWithRange:NSMakeRange(userActionDisplayLength - MAX_INPUT_DISPLAY_LENGTH, MAX_INPUT_DISPLAY_LENGTH)];
     }
     self.inputDisplay.text = userDisplayText;
+}
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+    return YES;
 }
 - (void)viewDidUnload {
     [self setInputDisplay:nil];
