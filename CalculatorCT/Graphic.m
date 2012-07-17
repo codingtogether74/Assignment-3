@@ -89,30 +89,8 @@ if (gesture.state==UIGestureRecognizerStateChanged ||
 
 const CGFloat darkRedColorValues[] = {1.0, 0.2, 0.2, 1.0};
 
-#define DOT_RADIUS 1.0
+#define DOT_RADIUS 0.5
 
-- (void)drawDotAtPoint:(CGPoint)p inContext:(CGContextRef)context
-{
-    UIGraphicsPushContext(context);
-    CGContextSetFillColor(context, darkRedColorValues);
-    CGContextSetStrokeColor(context, darkRedColorValues);
-    CGContextBeginPath(context);
-    CGContextAddArc(context, p.x, p.y, DOT_RADIUS, 0, 2*M_PI, YES); // 360 degree (0 to 2pi) arc
-    CGContextStrokePath(context);
-    UIGraphicsPopContext();
-}
-
-- (void)drawLineBetweenPointA:(CGPoint)a andB:(CGPoint)b inContext:(CGContextRef)context
-{
-    UIGraphicsPushContext(context);
-    CGContextSetStrokeColor(context, darkRedColorValues);
-    
-    CGContextBeginPath(context);
-    CGContextMoveToPoint(context, a.x, a.y);
-    CGContextAddLineToPoint(context, b.x, b.y);
-    CGContextStrokePath(context);
-    UIGraphicsPopContext();
-}
 
 // For every pixel on the screen, figure out it's "value", evaluate it, and then
 // convert that value back to the coordinate system
@@ -125,7 +103,6 @@ const CGFloat darkRedColorValues[] = {1.0, 0.2, 0.2, 1.0};
 
 - (void) plotGraphInContext:(CGContextRef)context
 {
-
     UIGraphicsPushContext(context);
  //---------draw line graph---------- 
     CGContextSetLineWidth(context, 1.0);
@@ -153,7 +130,7 @@ const CGFloat darkRedColorValues[] = {1.0, 0.2, 0.2, 1.0};
             }   
             else {            
                 
-                [self drawCircleAtPoint:point withRadius:0.5 inContext:context];
+                [self drawCircleAtPoint:point withRadius:DOT_RADIUS inContext:context];
             }
             beforePointIsEmpty=0;
             beforePoint=point;
@@ -189,42 +166,6 @@ const CGFloat darkRedColorValues[] = {1.0, 0.2, 0.2, 1.0};
     [AxesDrawer drawAxesInRect:bounds originAtPoint:axesOrigin scale:self.scale];
    [self plotGraphInContext:context];
     
-//---------draw line graph---------- 
-/*    CGContextSetLineWidth(context, 1.0);
-    [[UIColor redColor] setStroke];
-    [[UIColor blueColor] setFill];
-
-    CGContextBeginPath(context);
-    CGPoint beforePoint;
-    BOOL beforePointIsEmpty =1;
-    
-    BOOL isProgramValid=[self.dataSource validProgram];
-    
-    if (isProgramValid){
-    for (int i=0-self.origin.x; i<self.bounds.size.width-self.origin.x; i++) {
-        CGPoint point;
-        point.x=i+self.origin.x;
-        double xValueAtPoint=i/self.scale-self.bounds.size.width/(2*self.scale);
-        
-        double yValueAtPoint=[self.dataSource yForGraphic:self withXValue:xValueAtPoint];
-        
-        point.y=-self.scale* yValueAtPoint+self.bounds.size.height/2.0+self.origin.y;
-        if ([self.dataSource drawLinesForGraphView:self]) {
-               CGContextMoveToPoint(context, beforePoint.x, beforePoint.y);
-               if (!beforePointIsEmpty) CGContextAddLineToPoint(context, point.x, point.y);
-        }   
-        else {            
-
-            [self drawCircleAtPoint:point withRadius:0.5 inContext:context];
-//       CGContextAddArc(context, point.x, point.y, 2.0, 0, 2*M_PI, YES); // 360 degree (0 to 2pi) arc
-        }
-        beforePointIsEmpty=0;
-        beforePoint=point;
-        CGContextStrokePath(context);
-        
-       }
-    }    
-*/
  }
 
 @end

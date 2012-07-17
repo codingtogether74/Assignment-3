@@ -460,7 +460,6 @@
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="3Sf-xN-Obq"/>
                                     <barButtonItem style="plain" id="b5T-7L-ePz"/>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="pFk-FE-rBL"/>
-                                    <barButtonItem style="plain" id="WIN-ek-Q2F"/>
                                     <barButtonItem style="plain" id="nlw-IN-38t">
                                         <switch key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" id="OxJ-5N-Jes">
                                             <rect key="frame" x="677" y="9" width="79" height="27"/>
