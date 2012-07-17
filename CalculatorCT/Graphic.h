@@ -11,7 +11,8 @@
 @protocol GraphViewDataSource 
 
 -(double)yForGraphic:(Graphic *)sender withXValue:(double)x;
-
+- (BOOL)drawLinesForGraphView:(Graphic *)sender;
+- (BOOL)validProgram;
 @end
 
 @interface Graphic : UIView

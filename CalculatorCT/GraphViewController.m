@@ -12,21 +12,61 @@
 
 @interface GraphViewController () <GraphViewDataSource>
 @property (nonatomic, weak) IBOutlet Graphic *graphicView;
+@property (weak, nonatomic) IBOutlet UIToolbar *toolBar;
+@property (weak, nonatomic) IBOutlet UISwitch *LineModeSwitch;
+@property (nonatomic, strong) IBOutlet UIPopoverController * myPopoverController;
 @end
 
 @implementation GraphViewController
 
 @synthesize program=_program;
 @synthesize graphicView=_graphicView;
+@synthesize toolBar = _toolBar;
+@synthesize LineModeSwitch = _LineModeSwitch;
+
+- (IBAction)LineModePress:(UISwitch *)sender {
+  [self.graphicView setNeedsDisplay];
+
+}
+
+- (BOOL) validProgram
+{
+    return (self.program != nil);
+}
 
 -(void)setProgram:(id)program
 {
     _program=program;
 	// We want to set the title of the controller if the program changes
-	self.title = [NSString stringWithFormat:@"y = %@", 
-                  [CalculatorBrain descriptionOfProgram:self.program]];
+//	self.title = [NSString stringWithFormat:@"y = %@", 
+//                  [CalculatorBrain descriptionOfProgram:self.program]];
+    [self showProgramDescription:[NSString stringWithFormat:@"y = %@", 
+                                  [CalculatorBrain descriptionOfProgram:self.program]]];
+
     [self.graphicView setNeedsDisplay];
 }
+
+- (void)showProgramDescription:(NSString *)programDesc
+{
+    BOOL changed;
+    if (self.toolBar) {
+        // iPad
+        NSMutableArray * items = [[self.toolBar items] mutableCopy];
+        for (int i = 0; i < items.count; i++) {
+            UIBarButtonItem * b = [items objectAtIndex:i];
+            if (b.style == UIBarButtonItemStylePlain) {
+                [b setTitle:programDesc];
+                changed = YES;
+            }
+        }
+        if (changed) [self.toolBar setItems:items];
+    }
+    else {
+        // iPhone
+        self.title = [NSString stringWithFormat:@"y = %@",programDesc ];
+    }
+}
+
 -(void)setGraphicView:(Graphic *)graphicView
 {
     _graphicView=graphicView;
@@ -50,9 +90,69 @@
     
 }
 
+- (BOOL) drawLinesForGraphView:(Graphic *)sender
+{
+    return self.LineModeSwitch.on;
+}
+
+// Split View Delegate 
+// all the rigamarole in here to present a popover (whew!)
+//
+
+@synthesize myPopoverController = _myPopoverController;
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    self.splitViewController.delegate = self;
+}
+
+
+- (void) splitViewController:(UISplitViewController *)svc
+      willHideViewController:(UIViewController *)aViewController
+           withBarButtonItem:(UIBarButtonItem *)barButtonItem
+        forPopoverController:(UIPopoverController *)pc
+{
+    // add button to toolbar
+    barButtonItem.title = @"Calculator";
+    // tell the detail view to put this button up
+    NSMutableArray *items = [[self.toolBar items] mutableCopy];
+    [items insertObject:barButtonItem atIndex:0];
+    [self.toolBar setItems:items animated:YES];
+    self.myPopoverController = pc;
+} 
+
+- (void)splitViewController:(UISplitViewController *)svc 
+     willShowViewController:(UIViewController *)aViewController
+  invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem
+{
+    // remove button from toolbar
+    NSMutableArray *items = [[self.toolBar items] mutableCopy];
+    [items removeObjectAtIndex:0];
+    [self.toolBar setItems:items animated:YES];
+    self.myPopoverController = nil;
+}
+- (BOOL)splitViewController:(UISplitViewController *)svc
+   shouldHideViewController:(UIViewController *)vc
+              inOrientation:(UIInterfaceOrientation)orientation
+{
+    if (self.splitViewController) {
+        // iPad
+        return UIInterfaceOrientationIsPortrait(orientation);
+    } else {
+        // iPhone
+        return NO;
+    }
+}
+
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return YES;
 }
 
+- (void)viewDidUnload {
+    [self setToolBar:nil];
+    [self setLineModeSwitch:nil];
+    [self setLineModeSwitch:nil];
+    [super viewDidUnload];
+}
 @end

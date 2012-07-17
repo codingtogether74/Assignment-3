@@ -143,6 +143,12 @@
     }
     return gvc;
 }
+
+//
+// iPad:   Send program to graph pane
+// iPhone: Bring up Graph by Segue
+//
+
 - (IBAction)graphPress:(id)sender {
     if ([self splitViewGraphViewController]) {
         [self splitViewGraphViewController].program=self.brain.program;
