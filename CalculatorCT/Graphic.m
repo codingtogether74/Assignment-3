@@ -15,23 +15,34 @@
 @synthesize scale=_scale;
 
 #define DEFAULT_SCALE 20.0;
+#define DEFAULT_ORIGIN_X 0.0
+#define DEFAULT_ORIGIN_Y 0.0
 
+
+-(CGPoint)origin
+{
+/*    if (_origin.x==0 && _origin.y==0) {
+        return [self retrieveFromUserDefaultsOrigin];
+    }else {
+        return _origin;
+   }
+*/      
+     return _origin;
+}
 
 -(void)setOrigin:(CGPoint)origin
 {
     if (origin.x!=_origin.x || origin.y != _origin.y) {
         _origin=origin;
         [self setNeedsDisplay];
+//        [self saveToUserDefaultsOrgin:origin];
     }    
 }
 
 -(CGFloat)scale
 {
-    if (!_scale) {
-        return DEFAULT_SCALE;
-    }else {
-        return _scale;
-    }
+    if(!_scale) return  DEFAULT_SCALE         //[self retrieveFromUserDefaultsScale];
+    else return _scale;
 }
 
 -(void)setScale:(CGFloat)scale
@@ -39,6 +50,7 @@
     if (scale!=_scale) {
        _scale=scale;
        [self setNeedsDisplay];
+//        [self saveToUserDefaultsScale:scale];
     }    
 }
 
@@ -167,5 +179,46 @@ const CGFloat darkRedColorValues[] = {1.0, 0.2, 0.2, 1.0};
    [self plotGraphInContext:context];
     
  }
+
+-(void)saveToUserDefaultsOrgin:(CGPoint)origin
+{
+    NSUserDefaults *standardUserDefaults=[NSUserDefaults standardUserDefaults];
+    if (standardUserDefaults) {
+        [standardUserDefaults setFloat:origin.x forKey:@"Default Origin X"];
+        [standardUserDefaults setFloat:origin.y forKey:@"Default Origin Y"];
+        [standardUserDefaults synchronize];
+    }
+}
+
+-(CGPoint)retrieveFromUserDefaultsOrigin
+{
+    NSUserDefaults *standardUserDefaults=[NSUserDefaults standardUserDefaults];
+    CGPoint origin=CGPointMake(DEFAULT_ORIGIN_X, DEFAULT_ORIGIN_Y);
+    if (standardUserDefaults) {
+        origin.x=[standardUserDefaults floatForKey:@"Default Origin X"];
+        origin.y=[standardUserDefaults floatForKey:@"Default Origin Y"];
+    }
+    return origin;
+}
+
+
+-(void)saveToUserDefaultsScale:(CGFloat)scale
+{
+    NSUserDefaults *standardUserDefaults=[NSUserDefaults standardUserDefaults];
+    if (standardUserDefaults) {
+        [standardUserDefaults setFloat:scale forKey:@"Default Scale"];
+        [standardUserDefaults synchronize];
+    }
+}
+
+-(float)retrieveFromUserDefaultsScale
+{
+    NSUserDefaults *standardUserDefaults=[NSUserDefaults standardUserDefaults];
+    float scale=DEFAULT_SCALE;
+    if (standardUserDefaults) {
+        scale=[standardUserDefaults floatForKey:@"Default Scale"];
+    }
+    return scale;
+}
 
 @end
