@@ -21,13 +21,13 @@
 
 -(CGPoint)origin
 {
-/*    if (_origin.x==0 && _origin.y==0) {
+    if (_origin.x==0 && _origin.y==0) {
         return [self retrieveFromUserDefaultsOrigin];
     }else {
         return _origin;
    }
-*/      
-     return _origin;
+      
+//     return _origin;
 }
 
 -(void)setOrigin:(CGPoint)origin
@@ -35,13 +35,13 @@
     if (origin.x!=_origin.x || origin.y != _origin.y) {
         _origin=origin;
         [self setNeedsDisplay];
-//        [self saveToUserDefaultsOrgin:origin];
+        [self saveToUserDefaultsOrgin:origin];
     }    
 }
 
 -(CGFloat)scale
 {
-    if(!_scale) return  DEFAULT_SCALE         //[self retrieveFromUserDefaultsScale];
+    if(!_scale) return     [self retrieveFromUserDefaultsScale];
     else return _scale;
 }
 
@@ -50,7 +50,7 @@
     if (scale!=_scale) {
        _scale=scale;
        [self setNeedsDisplay];
-//        [self saveToUserDefaultsScale:scale];
+        [self saveToUserDefaultsScale:scale];
     }    
 }
 
@@ -128,26 +128,29 @@ const CGFloat darkRedColorValues[] = {1.0, 0.2, 0.2, 1.0};
     BOOL isProgramValid=[self.dataSource validProgram];
     
     if (isProgramValid){
-        for (int i=0-self.origin.x; i<self.bounds.size.width-self.origin.x; i++) {
+        for (int i=0-self.origin.x; i<=self.bounds.size.width-self.origin.x; i++) {
             CGPoint point;
             point.x=i+self.origin.x;
             double xValueAtPoint=i/self.scale-self.bounds.size.width/(2*self.scale);
             
-            double yValueAtPoint=[self.dataSource yForGraphic:self withXValue:xValueAtPoint];
-            
-            point.y=-self.scale* yValueAtPoint+self.bounds.size.height/2.0+self.origin.y;
-            if ([self.dataSource drawLinesForGraphView:self]) {
-                CGContextMoveToPoint(context, beforePoint.x, beforePoint.y);
-                if (!beforePointIsEmpty) CGContextAddLineToPoint(context, point.x, point.y);
-            }   
-            else {            
+            id yObjPtr=[self.dataSource yForGraphic:self withXValue:xValueAtPoint];
+            if ([yObjPtr isKindOfClass:[NSNumber class]]){
+                float yValueAtPoint=[yObjPtr floatValue];
+                 point.y=-self.scale* yValueAtPoint+self.bounds.size.height/2.0+self.origin.y;
+                 if ([self.dataSource drawLinesForGraphView:self]) {
+                     CGContextMoveToPoint(context, beforePoint.x, beforePoint.y);
+                     if (!beforePointIsEmpty) CGContextAddLineToPoint(context, point.x, point.y);
+                     }   
+                 else {            
                 
-                [self drawCircleAtPoint:point withRadius:DOT_RADIUS inContext:context];
+                       [self drawCircleAtPoint:point withRadius:DOT_RADIUS inContext:context];
+                 }
+                 beforePointIsEmpty=0;
+                 beforePoint=point;
+                 CGContextStrokePath(context);
+            }else {
+                beforePointIsEmpty=1;
             }
-            beforePointIsEmpty=0;
-            beforePoint=point;
-            CGContextStrokePath(context);
-            
         }
     }    
     UIGraphicsPopContext();

@@ -19,14 +19,12 @@
 @property (nonatomic,strong)  NSDictionary *testVariablesValue;
 
 - (NSString *)variablesDescription;
-- (id)calculateProgram;
 - (void) updateInputDisplay: (NSString *)displayString;
 @end
 
 @implementation CalculatorViewController
 @synthesize display = _display;
 @synthesize inputDisplay = _inputDisplay;
-@synthesize variablesDisplay = _variablesDisplay;
 @synthesize userIsInTheMiddleOfEnteringANumber=_userIsInTheMiddleOfEnteringANumber;
 @synthesize userAlreadyEnteredADecimalPoint=_userAlreadyEnteredADecimalPoint;
 @synthesize testVariablesValue=_testVariablesValue;
@@ -62,7 +60,6 @@
 {
     [self.brain pushOperand:[self.display.text doubleValue]];    
     [self updateInputDisplay: [self.brain description]];
-    self.variablesDisplay.text = [self variablesDescription];
     self.userIsInTheMiddleOfEnteringANumber=NO;
     self.userAlreadyEnteredADecimalPoint=NO; 
     
@@ -73,14 +70,6 @@
     if (self.userIsInTheMiddleOfEnteringANumber) [self enterPressed];
     [self.brain pushOperation:operation];
     [self synchronizeView];      
-/*    id result=[self.brain performOperation:operation];
-    if ([result isKindOfClass:[NSString class]]) 
-        self.display.text = result;
-    else 
-        self.display.text = [NSString stringWithFormat:@"%g", [result doubleValue]];
-    [self updateInputDisplay: [self.brain description]];
-    self.variablesDisplay.text = [self variablesDescription];
-*/
 }
 - (IBAction)variablePressed:(UIButton *)sender {
 
@@ -88,7 +77,6 @@
 	[self.brain pushVariable:sender.currentTitle];
     self.display.text = sender.currentTitle;
     [self updateInputDisplay: [self.brain description]];
-    self.variablesDisplay.text = [self variablesDescription];
     self.userIsInTheMiddleOfEnteringANumber=NO;
     self.userAlreadyEnteredADecimalPoint=NO; 
 }
@@ -114,7 +102,6 @@
     self.inputDisplay.text = @"";
     [self.brain ClearStack];
     self.testVariablesValue = nil;
-    self.variablesDisplay.text = [self variablesDescription];
     self.userIsInTheMiddleOfEnteringANumber = NO;
     self.userAlreadyEnteredADecimalPoint = NO;
 }
@@ -128,41 +115,18 @@
         [self synchronizeView];      
     }
 }
-- (IBAction)setTestVariables:(UIButton *)sender {
- 
-    if (self.userIsInTheMiddleOfEnteringANumber) [self enterPressed];
-        self.testVariablesValue = [NSDictionary dictionaryWithObjectsAndKeys:@"1", @"x",nil];
-    [self synchronizeView];      
-}
-
--(GraphViewController *)splitViewGraphViewController
-{
-    id gvc=[self.splitViewController.viewControllers lastObject];
-    if (![gvc isKindOfClass:[GraphViewController class]]) {
-        gvc=nil;
-    }
-    return gvc;
-}
-
-//
-// iPad:   Send program to graph pane
-// iPhone: Bring up Graph by Segue
-//
-
-- (IBAction)graphPress:(id)sender {
-    if ([self splitViewGraphViewController]) {
-        [self splitViewGraphViewController].program=self.brain.program;
-    }else {
-
-        [self performSegueWithIdentifier:@"ShowGraph" sender:self];
-    }    
-}
-
--(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    if ([segue.identifier isEqualToString:@"ShowGraph"]) {
-        [segue.destinationViewController setProgram:self.brain.program];
-    }
+- (NSString *)lightTest {
+    self.testVariablesValue = [NSDictionary dictionaryWithObjectsAndKeys:@"1", @"x",nil];
+    id result1 =[[self.brain class] runProgram:self.brain.program usingVariableValues:self.testVariablesValue]; 
+    self.testVariablesValue = [NSDictionary dictionaryWithObjectsAndKeys:@"-1", @"x",nil];
+    id result2 =[[self.brain class] runProgram:self.brain.program usingVariableValues:self.testVariablesValue]; 
+    self.testVariablesValue = [NSDictionary dictionaryWithObjectsAndKeys:@"100", @"x",nil];
+    id result3 =[[self.brain class] runProgram:self.brain.program usingVariableValues:self.testVariablesValue];
+                     
+    if ([result1 isKindOfClass:[NSString class]]&& [result2 isKindOfClass:[NSString class]]&& [result3 isKindOfClass:[NSString class]]
+        && [result1 isEqualToString:result2]&& [result1 isEqualToString:result2]) return result1;
+     else return @"Variables in use";      
+    
 }
 
 
@@ -203,26 +167,23 @@
     return descriptionOfVariablesUsed;
 }
 
-- (id)calculateProgram {
-    
-    if (!self.testVariablesValue) {
-        return [[self.brain class] runProgram:self.brain.program];
-    } else {
-        return [[self.brain class] runProgram:self.brain.program usingVariableValues:self.testVariablesValue];
-    }
-    
-}
 
 -(void)synchronizeView {   
-
-    id result =[self calculateProgram]; 
-    if ([result isKindOfClass:[NSString class]])
-        self.display.text = result;
-    else 
-        self.display.text = [NSString stringWithFormat:@"%g", [result doubleValue]];
+    NSSet *variablesBeingUsed = [[self.brain class] variablesUsedInProgram:self.brain.program];
+    if ([variablesBeingUsed count]>0) {
+   // variables present
+        self.display.text=[self lightTest]; 
+    }else {
+   //no variables     
+        id result =[[self.brain class] runProgram:self.brain.program usingVariableValues:nil]; 
+        if ([result isKindOfClass:[NSString class]])
+            self.display.text = result;
+        else 
+            self.display.text = [NSString stringWithFormat:@"%g", [result doubleValue]];
+    }
+    
 
     [self updateInputDisplay: [self.brain description]];
-    self.variablesDisplay.text = [self variablesDescription];
     self.userIsInTheMiddleOfEnteringANumber = NO;
     self.userAlreadyEnteredADecimalPoint = NO;
 }
@@ -237,13 +198,56 @@
     }
     self.inputDisplay.text = userDisplayText;
 }
+
+-(GraphViewController *)splitViewGraphViewController
+{
+    id gvc=[self.splitViewController.viewControllers lastObject];
+    if (![gvc isKindOfClass:[GraphViewController class]]) {
+        gvc=nil;
+    }
+    return gvc;
+}
+
+//
+// iPad:   Send program to graph pane
+// iPhone: Bring up Graph by Segue
+//
+
+- (IBAction)graphPress:(id)sender {
+    if ([self splitViewGraphViewController]) {
+        [self splitViewGraphViewController].program=self.brain.program;
+    }else {
+        
+        [self performSegueWithIdentifier:@"ShowGraph" sender:self];
+    }    
+}
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:@"ShowGraph"]) {
+        [segue.destinationViewController setProgram:self.brain.program];
+    }
+}
+
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return YES;
 }
+
+// Need to disable swipes to reveal calculator for iOS 5.1, interferes with pan. MAKE SURE you check that
+// the splitview controller supports the selector "respondsToSelecter" before you call it, or you will
+// crash on iOS 5!
+- (void)awakeFromNib {
+    [super awakeFromNib];
+    if (self.splitViewController) {
+        if ([self.splitViewController respondsToSelector:@selector(presentsWithGesture)]) {
+            self.splitViewController.presentsWithGesture = NO;
+        }
+    }
+}
+
 - (void)viewDidUnload {
     [self setInputDisplay:nil];
-    [self setVariablesDisplay:nil];
     [super viewDidUnload];
 }
 @end

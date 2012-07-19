@@ -37,11 +37,11 @@
 -(void)setProgram:(id)program
 {
     _program=program;
+
 	// We want to set the title of the controller if the program changes
-//	self.title = [NSString stringWithFormat:@"y = %@", 
-//                  [CalculatorBrain descriptionOfProgram:self.program]];
-    [self showProgramDescription:[NSString stringWithFormat:@"y = %@", 
-                                  [CalculatorBrain descriptionOfProgram:self.program]]];
+    // If there is a comma, only show the text after the rightmost command
+    NSArray *listPrograms = [[CalculatorBrain descriptionOfProgram:self.program] componentsSeparatedByString:@","];
+    [self showProgramDescription:[NSString stringWithFormat:@"y = %@", [ listPrograms lastObject]]];
 
     [self.graphicView setNeedsDisplay];
 }
@@ -63,7 +63,8 @@
     }
     else {
         // iPhone
-        self.title = [NSString stringWithFormat:@"y = %@",programDesc ];
+        self.title = programDesc;
+//        self.title = [NSString stringWithFormat:@"y = %@",programDesc ];
     }
 }
 
@@ -77,17 +78,17 @@
     [self.graphicView addGestureRecognizer:tripleTap];
     self.graphicView.dataSource=self;
 }
--(double)yForGraphic:(Graphic *)sender withXValue:(double)xValue
+-(id)yForGraphic:(Graphic *)sender withXValue:(double)xValue
 {
 	// Find the corresponding Y value by passing the x value to the calculator Brain
 	id yValue = [CalculatorBrain runProgram:self.program usingVariableValues:
-                 [NSDictionary dictionaryWithObject:[NSNumber numberWithFloat:xValue] 
-                                             forKey:@"x"]];
+                 [NSDictionary dictionaryWithObject:[NSNumber numberWithFloat:xValue] forKey:@"x"]];
 	
-    if (![yValue isKindOfClass:[NSString class]]) return  [yValue doubleValue];
-    else return 0.0;
-//	return ((NSNumber *)yValue).floatValue;	
-    
+    if ([yValue isKindOfClass:[NSNumber class]]){
+        return([NSNumber numberWithFloat: [yValue floatValue]]);
+    } else {
+        return @"Error"; // When the caller receives a string, it will know there is an error in the value calculation
+    }    
 }
 
 - (BOOL) drawLinesForGraphView:(Graphic *)sender
@@ -105,6 +106,7 @@
 {
     [super awakeFromNib];
     self.splitViewController.delegate = self;
+
 }
 
 - (void) splitViewController:(UISplitViewController *)svc

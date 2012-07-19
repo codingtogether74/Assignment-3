@@ -10,7 +10,7 @@
 @class Graphic;
 @protocol GraphViewDataSource 
 
--(double)yForGraphic:(Graphic *)sender withXValue:(double)x;
+-(id)yForGraphic:(Graphic *)sender withXValue:(double)x;
 - (BOOL)drawLinesForGraphView:(Graphic *)sender;
 - (BOOL)validProgram;
 @end

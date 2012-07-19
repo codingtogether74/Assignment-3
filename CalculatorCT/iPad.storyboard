@@ -403,13 +403,6 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="eea-sR-6fx">
-                                <rect key="frame" x="6" y="424" width="217" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="DXE-Pu-Qfv">
                                 <rect key="frame" x="83" y="324" width="136" height="37"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -433,7 +426,6 @@
                     <connections>
                         <outlet property="display" destination="neL-HG-xLn" id="fkw-0E-3fw"/>
                         <outlet property="inputDisplay" destination="6h8-X1-VNe" id="vil-rx-yXK"/>
-                        <outlet property="variablesDisplay" destination="eea-sR-6fx" id="ooz-ZR-reS"/>
                     </connections>
                 </viewController>
             </objects>
@@ -484,31 +476,6 @@
             <point key="canvasLocation" x="1602" y="-576"/>
         </scene>
     </scenes>
-    <classes>
-        <class className="CalculatorViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/CalculatorViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="display" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="inputDisplay" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="variablesDisplay" candidateClass="UILabel"/>
-            </relationships>
-        </class>
-        <class className="GraphViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/GraphViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="LineModeSwitch" candidateClass="UISwitch"/>
-                <relationship kind="outlet" name="graphicView" candidateClass="Graphic"/>
-                <relationship kind="outlet" name="myPopoverController" candidateClass="UIPopoverController"/>
-                <relationship kind="outlet" name="toolBar" candidateClass="UIToolbar"/>
-            </relationships>
-        </class>
-        <class className="Graphic" superclassName="UIView">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/Graphic.h"/>
-            <relationships>
-                <relationship kind="outlet" name="dataSource"/>
-            </relationships>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar" statusBarStyle="blackTranslucent"/>
         <simulatedOrientationMetrics key="orientation"/>

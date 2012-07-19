@@ -118,7 +118,6 @@
 {
     NSString * INSUFFICIENT_OPERANDS = @"Insufficient operands!";
     NSString * INVALID_OPERATION = @"Operation not implemented!";
-    NSString * INVALID_OPERAND = @"Operand not match!";
     NSString * DIVIDE_ZERO = @"Cannot divide by zero";
     NSString * SQRT_NEGATIVE = @"Cannot do Square Root of negative number";
     
@@ -126,7 +125,12 @@
     
     
         id topOfStack = [stack lastObject];
-        if (topOfStack) [stack removeLastObject];else return @"0";
+        if (topOfStack) {
+             [stack removeLastObject];
+        }    
+        else {
+                return INSUFFICIENT_OPERANDS;
+            }
         
         if ([topOfStack isKindOfClass:[NSNumber class]])
         {
@@ -135,7 +139,7 @@
         else if ([topOfStack isKindOfClass:[NSString class]])
         {
            NSString *operation = topOfStack;
-           if (![self isOperation:operation]) return INVALID_OPERATION;
+           if (![self isOperation:operation]) return @"Variables in use";
 
            if ([operation isEqualToString:@"+"]){
                id operand1=[self popOperandOffProgramStack:stack];
@@ -170,13 +174,13 @@
            } else if ([@"sin" isEqualToString:operation]) {
                id operand=[self popOperandOffProgramStack:stack];
                if ([operand isKindOfClass:[NSNumber class]]) {
-                   result=sin([operand doubleValue]/180 * M_PI);         
+                   result=sin([operand doubleValue]/*/180 * M_PI*/);         
               } else return INSUFFICIENT_OPERANDS;
                
            } else if ([@"cos" isEqualToString:operation]) {
                id operand=[self popOperandOffProgramStack:stack];
                if ([operand isKindOfClass:[NSNumber class]]) {
-                   result=cos([operand doubleValue]/180 * M_PI);         
+                   result=cos([operand doubleValue]/*/180 * M_PI*/);         
                } else return INSUFFICIENT_OPERANDS;
                
            } else if ([@"√" isEqualToString:operation]) {
@@ -195,8 +199,8 @@
                    result=[operand doubleValue]*-1;         
                } else return INSUFFICIENT_OPERANDS;
            } else return INSUFFICIENT_OPERANDS;
+            
         } else return INVALID_OPERATION;
-    if (isnan(result))return INVALID_OPERAND;
        
    return [NSNumber numberWithDouble:result];
 }
