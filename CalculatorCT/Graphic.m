@@ -25,9 +25,9 @@
         return [self retrieveFromUserDefaultsOrigin];
     }else {
         return _origin;
-   }
-      
-//     return _origin;
+    }
+    
+    //     return _origin;
 }
 
 -(void)setOrigin:(CGPoint)origin
@@ -35,7 +35,7 @@
     if (origin.x!=_origin.x || origin.y != _origin.y) {
         _origin=origin;
         [self setNeedsDisplay];
-        [self saveToUserDefaultsOrgin:origin];
+//        [self saveToUserDefaultsOrgin:origin];
     }    
 }
 
@@ -48,9 +48,9 @@
 -(void)setScale:(CGFloat)scale
 {
     if (scale!=_scale) {
-       _scale=scale;
-       [self setNeedsDisplay];
-        [self saveToUserDefaultsScale:scale];
+        _scale=scale;
+        [self setNeedsDisplay];
+//        [self saveToUserDefaultsScale:scale];
     }    
 }
 
@@ -58,7 +58,7 @@
 {
     self.contentMode=UIViewContentModeRedraw;
 }
- -(void)awakeFromNib
+-(void)awakeFromNib
 {
     [self setup];
 }
@@ -74,11 +74,13 @@
 
 -(void)pinch:(UIPinchGestureRecognizer *)gesture
 {
-if (gesture.state==UIGestureRecognizerStateChanged ||
-    gesture.state==UIGestureRecognizerStateEnded)
-    self.scale*=gesture.scale;
-    gesture.scale=1.0;
-    
+    if (gesture.state==UIGestureRecognizerStateChanged ||
+        gesture.state==UIGestureRecognizerStateEnded)
+        self.scale*=gesture.scale;
+        gesture.scale=1.0;
+    if (gesture.state == UIGestureRecognizerStateEnded){
+            [self saveToUserDefaultsScale:self.scale];
+    }
 }
 
 -(void)pan:(UIPanGestureRecognizer *)gesture
@@ -89,6 +91,9 @@ if (gesture.state==UIGestureRecognizerStateChanged ||
         self.origin=CGPointMake(self.origin.x+translation.x, self.origin.y+translation.y);
         [gesture setTranslation:CGPointZero inView:self];
     } 
+    if (gesture.state == UIGestureRecognizerStateEnded){
+        [self saveToUserDefaultsOrgin:self.origin];
+    }
 }
 
 -(void)tripleTap:(UITapGestureRecognizer *)gesture
@@ -96,6 +101,7 @@ if (gesture.state==UIGestureRecognizerStateChanged ||
     if (gesture.state==UIGestureRecognizerStateEnded){
         CGPoint tapPoint=[gesture locationInView:self];
         self.origin=CGPointMake(tapPoint.x-self.bounds.size.width/2.0, tapPoint.y-self.bounds.size.height/2.0);
+        [self saveToUserDefaultsOrgin:self.origin];
     } 
 }
 
@@ -116,7 +122,7 @@ const CGFloat darkRedColorValues[] = {1.0, 0.2, 0.2, 1.0};
 - (void) plotGraphInContext:(CGContextRef)context
 {
     UIGraphicsPushContext(context);
- //---------draw line graph---------- 
+    //---------draw line graph---------- 
     CGContextSetLineWidth(context, 1.0);
     [[UIColor redColor] setStroke];
     [[UIColor blueColor] setFill];
@@ -136,18 +142,18 @@ const CGFloat darkRedColorValues[] = {1.0, 0.2, 0.2, 1.0};
             id yObjPtr=[self.dataSource yForGraphic:self withXValue:xValueAtPoint];
             if ([yObjPtr isKindOfClass:[NSNumber class]]){
                 float yValueAtPoint=[yObjPtr floatValue];
-                 point.y=-self.scale* yValueAtPoint+self.bounds.size.height/2.0+self.origin.y;
-                 if ([self.dataSource drawLinesForGraphView:self]) {
-                     CGContextMoveToPoint(context, beforePoint.x, beforePoint.y);
-                     if (!beforePointIsEmpty) CGContextAddLineToPoint(context, point.x, point.y);
-                     }   
-                 else {            
-                
-                       [self drawCircleAtPoint:point withRadius:DOT_RADIUS inContext:context];
-                 }
-                 beforePointIsEmpty=0;
-                 beforePoint=point;
-                 CGContextStrokePath(context);
+                point.y=-self.scale* yValueAtPoint+self.bounds.size.height/2.0+self.origin.y;
+                if ([self.dataSource drawLinesForGraphView:self]) {
+                    CGContextMoveToPoint(context, beforePoint.x, beforePoint.y);
+                    if (!beforePointIsEmpty) CGContextAddLineToPoint(context, point.x, point.y);
+                }   
+                else {            
+                    
+                    [self drawCircleAtPoint:point withRadius:DOT_RADIUS inContext:context];
+                }
+                beforePointIsEmpty=0;
+                beforePoint=point;
+                CGContextStrokePath(context);
             }else {
                 beforePointIsEmpty=1;
             }
@@ -168,20 +174,20 @@ const CGFloat darkRedColorValues[] = {1.0, 0.2, 0.2, 1.0};
 - (void)drawRect:(CGRect)rect
 {
     CGContextRef context=UIGraphicsGetCurrentContext();
-     
+    
     //---------draw axes----
     CGPoint axesOrigin;
     axesOrigin.x=self.origin.x+self.bounds.size.width/2.0;
     axesOrigin.y=self.origin.y+self.bounds.size.height/2.0;
     CGRect bounds=self.bounds;
-
+    
     CGContextSetLineWidth(context, 2.0);
     [[UIColor blueColor] setStroke];
     
     [AxesDrawer drawAxesInRect:bounds originAtPoint:axesOrigin scale:self.scale];
-   [self plotGraphInContext:context];
+    [self plotGraphInContext:context];
     
- }
+}
 
 -(void)saveToUserDefaultsOrgin:(CGPoint)origin
 {

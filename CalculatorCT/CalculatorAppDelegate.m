@@ -18,7 +18,6 @@
     NSDictionary *appDefaults = [NSDictionary
                                  dictionaryWithObject:[NSNumber numberWithInteger:20] forKey:@"Default Scale"];
     [[NSUserDefaults standardUserDefaults] registerDefaults:appDefaults];
-    
    // Override point for customization after application launch.
     return YES;
 }

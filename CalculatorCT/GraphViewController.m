@@ -146,21 +146,6 @@
     }
 }
 
-- (void)viewWillDisappear:(BOOL)animated
-{
-//    [self saveDataToPermanentStore];
-    [super viewWillDisappear:animated];
-}
-
-- (void) saveDataToPermanentStore
-{
-    NSUserDefaults * defaults;
-        defaults = [NSUserDefaults standardUserDefaults];
-        [defaults setFloat:self.graphicView.origin.x forKey:@"Default Origin X"];
-        [defaults setFloat:self.graphicView.origin.y forKey:@"Default Origin Y"];
-        [defaults setFloat:self.graphicView.scale forKey:@"Default Scale"];
-}
-
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return YES;
